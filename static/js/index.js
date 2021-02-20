@@ -1,5 +1,5 @@
 
-var myMap = L.map("map-id", { center: [37.0902, -95.7129], zoom: 5});
+var myMap = L.map("map-id", { center: [37.0902, -95.7129], zoom: 3});
 
 L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
   attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
@@ -41,7 +41,7 @@ d3.json('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojs
     var legend = L.control({position: 'bottomright'});
         legend.onAdd = function(myMap) {
             var div = L.DomUtil.create('div', 'info legend'),
-                grades = [0, 10, 30, 50, 70, 90],
+                grades = [-10, 10, 30, 50, 70, 90],
                 labels = [];
             for (var i = 0; i < grades.length; i++) {
                 div.innerHTML +=
