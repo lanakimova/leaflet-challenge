@@ -13,32 +13,27 @@ L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
 d3.json('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson', function(d) {
     
     var features = d.features;
-    var coordinates = [];
-    var mag = [];
     
     features.forEach(function(feature) {
      
+        earthquakeDate = new Date(feature.properties.time);
+        humanDateFormat = earthquakeDate.toLocaleString('en-US', {timeZoneName: 'short'});
+
         var circle = L.circle([feature.geometry.coordinates[1], feature.geometry.coordinates[0]], {
             color: color(feature.geometry.coordinates[2]),
             fillColor: color(feature.geometry.coordinates[2]),
             fillOpacity: 0.5,
             radius: radius(feature.properties.mag)
-        }).addTo(myMap);
-
-
-        earthquakeDate = new Date(feature.properties.time);
-        humanDateFormat = earthquakeDate.toLocaleString('en-US', {timeZoneName: 'short'});
-        // ("en-US", {month: "long", day: 'numeric', year: 'numeric'});
-
-        circle.bindPopup(`<b>Earthquake ID: </b> ${feature.id}<br>
-                          <b>Magnitude: </b>${feature.properties.mag}<br>
-                          <b>Location: </b> ${feature.properties.place}<br>
-                          <b>Time: </b> ${humanDateFormat}`);
-
+        }).bindPopup(`<b>Earthquake ID: </b> ${feature.id}<br>
+        <b>Magnitude: </b>${feature.properties.mag}<br>
+        <b>Location: </b> ${feature.properties.place}<br>
+        <b>Time: </b> ${humanDateFormat}`).addTo(myMap)
         
     });
     
-    var legend = L.control({position: 'bottomright'});
+});
+
+var legend = L.control({position: 'bottomright'});
         legend.onAdd = function(myMap) {
             var div = L.DomUtil.create('div', 'info legend'),
                 grades = [-10, 10, 30, 50, 70, 90],
@@ -51,8 +46,6 @@ d3.json('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojs
                 return div;
         };
         legend.addTo(myMap);
-    
-});
 
 function color(earthquakeDepth) {
     if (earthquakeDepth < 10){
